@@ -44,13 +44,13 @@ Edit `config.json` to choose the provider and model. The bundled defaults are:
 | Provider | Default base URL | Default model | API key variable |
 | --- | --- | --- | --- |
 | `qwen` | `https://dashscope.aliyuncs.com/compatible-mode/v1` | `qwen3.8-max` | `DASHSCOPE_API_KEY` |
-| `gemini` | `https://zeusapi.huggi.dev/v1beta` (configured compatible gateway) | `gemini-3.6-flash` | `GEMINI_API_KEY` |
+| `gemini` | `https://generativelanguage.googleapis.com/v1beta` (official Gemini API) | `gemini-3.7-flash` | `GEMINI_API_KEY` |
 
 These are the official model codes from the linked provider documentation. They are lowercase API identifiers, not the display names shown in product pages. If an account or gateway exposes a different identifier, edit only `base_url`, `endpoint`, or `model` in `config.json`; the bridge does not hard-code a catalog.
 
 For Alibaba Cloud regional deployments, use the base URL format documented for the account, such as `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`, and replace `{WorkspaceId}` with the actual workspace ID. The public DashScope URL remains the default when the API key is provisioned for that endpoint.
 
-`qwen3.8-max` uses the OpenAI-compatible Chat Completions shape with a multimodal `messages[].content` array. For local images, the bridge sends a Base64 Data URL in `image_url.url`, which the Qwen documentation explicitly supports. `gemini-3.6-flash` uses `POST <base_url>/models/<model>:generateContent`. With the current configuration, the final URL is `https://zeusapi.huggi.dev/v1beta/models/gemini-3.6-flash:generateContent`. The native request includes `contents[0].role: "user"`, a text `parts` entry, and an `inline_data` image `parts` entry. The bridge also sends `User-Agent: codex-deepseek-vision/1.0`; this avoids a compatible gateway's Cloudflare/WAF rejecting Python's default `Python-urllib/...` user agent before request validation. To call a direct Google endpoint, set `base_url` to `https://generativelanguage.googleapis.com/v1beta`; the final path remains `/models/gemini-3.6-flash:generateContent`.
+`qwen3.8-max` uses the OpenAI-compatible Chat Completions shape with a multimodal `messages[].content` array. For local images, the bridge sends a Base64 Data URL in `image_url.url`, which the Qwen documentation explicitly supports. Gemini uses `POST <base_url>/models/<model>:generateContent`. With the current configuration, the final URL is `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent`. The native request includes `contents[0].role: "user"`, a text `parts` entry, and an `inline_data` image `parts` entry. The bridge sends `x-goog-api-key` using `GEMINI_API_KEY`. For a compatible third-party gateway, override `base_url` (and, when necessary, `endpoint_style`) in `config.json`.
 
 Thinking mode is only configurable for Qwen. It maps to an explicit `enable_thinking` boolean and an optional `thinking_budget`; this matters because `qwen3.8-max` defaults to thinking enabled. Gemini requests never include thinking fields.
 

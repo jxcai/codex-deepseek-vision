@@ -13,16 +13,14 @@ The Qwen documentation notes that `qwen3.8-max` requires the multimodal route wh
 
 ## Gemini
 
-- Configured compatible-gateway base URL: `https://zeusapi.huggi.dev/v1beta`
-- Optional direct-Google REST base URL (only when deliberately using Google's own credential): `https://generativelanguage.googleapis.com/v1beta`
-- Official model code: `gemini-3.6-flash` (lowercase).
-- The configured gateway uses the legacy native `POST <base_url>/models/<model>:generateContent` shape with `contents[].parts[].inline_data`. The official current image-understanding examples use `POST <base_url>/interactions` with `input` entries `{type:"text", text:...}` and `{type:"image", data:<base64>, mime_type:<mime>}`; select `endpoint_style: "interactions"` when using the official Google endpoint.
-- The configured relay accepts the same `x-goog-api-key: <GEMINI_API_KEY>` header as the native Gemini shape. The key is read from the project's `.env`; it is not assumed to be a Google-issued key.
-- Native `generateContent` requests must set `contents[0].role` to `user`. The configured relay is fronted by Cloudflare; the bridge sends an explicit `User-Agent` because Python's default `Python-urllib/...` can be rejected before the API returns a JSON error.
+- Configured official Gemini API base URL: `https://generativelanguage.googleapis.com/v1beta`
+- The configured request uses `POST <base_url>/models/<model>:generateContent` with `contents[].parts[].inline_data`. Google also recommends `POST <base_url>/interactions` for agentic and multi-turn workflows; set `endpoint_style: "interactions"` when that request shape is preferred.
+- Authentication uses `x-goog-api-key: <GEMINI_API_KEY>`. The key is read from the project's `.env`.
+- Native `generateContent` requests must set `contents[0].role` to `user`. The bridge sends an explicit `User-Agent` for traceability and compatibility with gateways that enforce client-header policies.
 - Gemini requests from this skill do not include any thinking parameter.
 - Interactions responses are read from `output_text` (with a fallback traversal of `outputs`).
 
-For an older or third-party Gemini gateway, set `endpoint_style` to `generate-content` or `openai` and configure its endpoint explicitly. A WAF/403 response from a third-party gateway is not evidence that the official Gemini request shape is invalid.
+For a compatible third-party Gemini gateway, override `base_url` and, if necessary, set `endpoint_style` to `generate-content`, `interactions`, or `openai`.
 
 ## Response Extraction
 
