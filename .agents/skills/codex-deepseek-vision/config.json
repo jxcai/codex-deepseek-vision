@@ -1,0 +1,27 @@
+{
+  "active_provider": "gemini",
+  "request": {
+    "timeout_seconds": 60,
+    "max_retries": 2,
+    "temperature": 0.6,
+    "default_prompt": "请理解并分析这张图片：说明图片中的主要内容、对象及其关系、场景或布局、可见文字、数据或图表含义，以及任何与后续问题相关的细节。只根据图片作答；无法确定的内容请明确说明不确定性。"
+  },
+  "providers": {
+    "qwen": {
+      "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+      "endpoint_style": "openai-chat",
+      "model": "qwen3.8-max",
+      "api_key_env": "DASHSCOPE_API_KEY",
+      "thinking": {
+        "enabled": false,
+        "thinking_budget": 0
+      }
+    },
+    "gemini": {
+      "base_url": "https://zeusapi.huggi.dev/v1beta",
+      "endpoint_style": "generate-content",
+      "model": "gemini-3.7-flash",
+      "api_key_env": "GEMINI_API_KEY"
+    }
+  }
+}

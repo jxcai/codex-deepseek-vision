@@ -1,0 +1,7 @@
+interface:
+  display_name: "Codex DeepSeek Vision"
+  short_description: "Add Qwen and Gemini vision to DeepSeek"
+  default_prompt: "Use $codex-deepseek-vision to inspect an image and provide structured visual context to DeepSeek."
+
+policy:
+  allow_implicit_invocation: true
