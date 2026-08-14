@@ -6,7 +6,7 @@
 
 在需要使用此 skill 的项目中，将下面这句话直接发给 Codex：
 
-> 请使用 `$skill-installer` 安装 `jxcai/codex-deepseek-vision` 仓库根目录中的 skill，将它作为项目级 skill 安装到当前项目的 `.agents/skills` 目录，名称使用 `codex-deepseek-vision`。
+> 请使用 `$skill-installer` 安装 `jxcai/codex-deepseek-vision` 仓库根目录中的 skill，将它作为项目级 skill 安装到当前项目的 `.agents/skills` 目录，名称使用 `codex-deepseek-vision`。安装后读取 skill 的 `config.json`，根据 `active_provider` 在项目根目录创建 `.env`：使用 Qwen 时写入 `DASHSCOPE_API_KEY=`，使用 Gemini 时写入 `GEMINI_API_KEY=`，等号后的 value 保持为空。如果 `.env` 已存在，不要覆盖原有内容，只添加缺失的 key。完成后向用户提供可点击的 `.env` 文件链接，提示用户点击打开并在文件中填写 API key；不要要求用户把 API key 发到聊天中。
 
 安装完成后，在下一轮对话中即可使用。仓库根目录就是 skill 根目录，因此安装时应使用仓库路径 `.`，不要再附加 `.agents/skills/codex-deepseek-vision`。
 
@@ -38,17 +38,17 @@ your-project/
 ## 配置
 
 1. 编辑 `config.json`，将 `active_provider` 设置为 `qwen` 或 `gemini`。
-2. 在项目根目录的 `.env` 中配置所选 provider 的密钥：
+2. Agent 安装完成后会在项目根目录创建或补充 `.env`，并保留空 value：
 
 ```dotenv
 # 使用 Qwen 时配置
-DASHSCOPE_API_KEY=your_key_here
+DASHSCOPE_API_KEY=
 
 # 使用 Gemini 时配置
-GEMINI_API_KEY=your_key_here
+GEMINI_API_KEY=
 ```
 
-不要提交 `.env` 或在提示词、日志中暴露密钥。
+点击 Agent 返回的 `.env` 文件链接，在对应等号后填写 API key。不要提交 `.env`，也不要在聊天、提示词或日志中暴露密钥。
 
 ## 使用
 
